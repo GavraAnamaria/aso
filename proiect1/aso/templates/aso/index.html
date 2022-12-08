@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+div.gfg {
+    margin:0px;
+    padding:20px;
+    width: 100%;
+    height: 700px;
+    overflow: auto;
+    text-align:justify;
+}
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: rgb(164, 122, 231);
+  background-color: #692baf;
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {background-color: #591fb6}
+
+.button:active {
+  background-color: #591fb6;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+</style>
+
+
+<meta charset="UTF-8">
+<title>CHAT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+</head>
+<body class="bg-violet-50">
+{% if latest_question_list %}
+<nav class="flex items-center justify-between px-4 py-6 bg-black">
+    {% if request.user.is_authenticated %}
+    <div>
+        <a href="/logout/" class="text-white hover:text-gray-200 text-3xl"><b>LOG OUT</b></a>
+    </div>
+    {% else %}
+    <div>
+        <a href="/login/" class="text-white hover:text-gray-200 text-3xl"><b>LOG IN</b></a>
+    </div>
+    {% endif %} 
+    <div class="flex items-center space-x-4">
+        <i class='fas fa-phone' style='font-size:24px;padding-right:15px; color:white'>     </i>
+        <i class='fas fa-video' style='font-size:24px; color:white'></i>
+    </div>
+</nav>
+<div style="padding-left:10px" class="gfg" id="id1">
+    <ul class="text-4xl">
+    {% for question in latest_question_list %}
+     <li><i class='far fa-comment' style='font-size:24px'><a class="text-2xl">  {{question.user.username}} :</a> {{ question.msg_text }} </i>
+        {% if question.msg_image %}
+            <img src="{{ question.msg_image.url }}" class="img-responsive" style="width: 20rem; height: 13rem; padding-left:10px" />
+        {%endif %}
+        <p class="text-xl">{{ question.pub_date }}</p><br>
+    </li>
+    {% endfor %}
+    </ul>
+</div>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+<!-- {% if request.user.is_authenticated %}
+{{request.user.username}}
+{% endif %} -->
+<br>
+<div style="display:inline-block; font-size:20px; background-color: #ddc8f3;">
+    <form method = "post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="padding-bottom:40px">
+        <div style="display:inline-block; padding-top: 20px;" >
+            <input type="file" name="msg_image" id="image_field" class="input-group-text attach_btn" accept=".jpg, .jpeg, .png">  
+        </div> <div style="display:inline-block; width:1400px" ><input tyle="display:inline-block; width:300px" 
+          type="text"
+          name="msg_text"
+          class="form-control msg_text"
+          id="input-text"
+          placeholder="..."
+        /> </div>
+        <button type="submit" class="button">Send</button>
+        </div>
+    </form>
+    </div>
+</body>
+
+<script>
+const element= document.querySelector("#id1");
+element.scrollTop=element.scrollHeight    </script>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <style>
+            .messages {
+                height: 400px;
+                overflow-y: auto;
+            }
+        </style>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Welcome</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-violet-300">
+        
+{% block content %}
+<div class="p-10 lg:p-20 text-center">
+    <h1 class="text-3xl lg:text-6xl text-white">Log in</h1>
+</div>
+
+<form method="post" action="." class="lg:w-1/4 px-4 mx-auto">
+    {% csrf_token %}
+    <div class="mb-5">
+        <label class="text-white">Username</label>
+        <input type="text" name="username" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
+
+    <div class="mb-5">
+        <label class="text-white">Password</label>
+        <input type="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %} 
+                <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
+                    <p>{{ error|escape }}</p>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+
+    <button class="px-5 py-3 rounded-xl text-white bg-violet-800 hover:bg-violet-700" style="margin-left:40%">Log in</button>
+</form>
+{% endblock %}
+    </body>
+</html>
